@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="styles.css">
+    <title>Scroll and Slide Effect</title>
+</head>
+<body>
+    <script src="script.js"></script>
+    
+    <div id="section1" class="section" data-speed="1">
+        <div class="container">
+            <div class="content-box">
+                <div class="text-content">
+                    <h1>Codzee</h1>
+                    <h2>Welcome to Codzee! We provide coding tutorials and resources to help you become a better programmer.</h2>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="section2" class="section" data-speed="0.5">
+        <div class="container">
+            <div class="content-box">
+                <div class="text-content">
+                    <h2>Section 2 Content</h2>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="section3" class="section" data-speed="0.2">
+        <div class="container">
+            <div class="content-box">
+                <div class="text-content">
+                    <h2>Section 3 Content</h2>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="slider-container">
+        <div class="slider"></div>
+        <div class="slider"></div>
+        <div class="slider"></div>
+    </div>
+    <!-- Rest of your HTML content -->
+
+</body>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            let currentSection = 1;
+
+            // Set up the Intersection Observer
+            const observer = new IntersectionObserver(entries => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.querySelector('.content').style.opacity = 1;
+                        entry.target.querySelector('.content').style.transform = 'translateY(0)';
+                    } else {
+                        entry.target.querySelector('.content').style.opacity = 0;
+                        entry.target.querySelector('.content').style.transform = 'translateY(20px)';
+                    }
+                });
+            }, { threshold: 0.5 });
+
+            const sections = document.querySelectorAll('.section');
+
+            sections.forEach(section => {
+                observer.observe(section);
+            });
+
+            window.addEventListener('wheel', function (event) {
+                if (event.deltaY > 0) {
+                    if (currentSection < 3) {
+                        currentSection++;
+                        updateSections();
+                        updateSliderOpacity();
+                    }
+                } else {
+                    if (currentSection > 1) {
+                        currentSection--;
+                        updateSections();
+                        updateSliderOpacity();
+                    }
+                }
+            });
+
+            function updateSections() {
+                const sections = document.querySelectorAll('.section');
+                sections.forEach(section => {
+                    section.style.transform = `translateX(-${(currentSection - 1) * 100}vw)`;
+                });
+            }
+
+            function updateSliderOpacity() {
+                const sliders = document.querySelectorAll('.slider');
+                sliders.forEach((slider, index) => {
+                    slider.style.opacity = index === (currentSection - 1) ? '1' : '0.5';
+                });
+            }
+
+            // Set the initial position
+            updateSections();
+        });
+    </script>
+</body>
+</html>
